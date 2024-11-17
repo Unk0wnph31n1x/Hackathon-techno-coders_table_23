@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meet the Team</title>
+    <style>
+        /* Reset some basic styling */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* Section title */
+        #meet-the-team {
+            text-align: center;
+            padding: 20px;
+        }
+
+        /* Team container (grid layout) */
+        .team-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* Adjusted for 3 members */
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .team-card {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .team-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .team-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin-bottom: 15px;
+        }
+
+        .team-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .role {
+            font-size: 1.1rem;
+            color: #777;
+            margin-bottom: 15px;
+        }
+
+        .extra-info {
+            display: none;
+            font-size: 0.9rem;
+            color: #555;
+        }
+
+        .extra-info p {
+            margin-top: 10px;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+
+    <section id="meet-the-team">
+        <h2>Meet the Team</h2>
+        <div class="team-container">
+            <!-- Team Member 1 (Mihit Goel) -->
+            <div class="team-card" onclick="toggleInfo('info1')">
+                <img src="mihit.png" alt="Mihit Goel" class="team-img"> <!-- Replace with Mihit's image -->
+                <h3>Mihit Goel</h3>
+                <p class="role">HTML Developer</p>
+                <div id="info1" class="extra-info">
+                    <p>Mihit is making the website functional and is making it easier for people to help stray dogs</p>
+                </div>
+            </div>
+
+            <!-- Team Member 2 (Anvay Peratla) -->
+            <div class="team-card" onclick="toggleInfo('info2')">
+                <img src="anvay.png" alt="Anvay Peratla" class="team-img"> <!-- Replace with Anvay's image -->
+                <h3>Anvay Peratla</h3>
+                <p class="role">Web designer</p>
+                <div id="info2" class="extra-info">
+                    <p>Anvay is responsible for the designing of the website, ensuring functionality and a smooth user experience.</p>
+                </div>
+            </div>
+
+            <!-- Team Member 3 (Avyukth Tirlapur) -->
+            <div class="team-card" onclick="toggleInfo('info3')">
+                <img src="avyukth.png" alt="Avyukth Tirlapur" class="team-img"> <!-- Replace with Avyukth's image -->
+                <h3>Avyukth Tirlapur</h3>
+                <p class="role">Content stratagest</p>
+                <div id="info3" class="extra-info">
+                    <p>Avyukth handles content strategy and helps craft the right messaging to reach the audience effectively.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        function toggleInfo(infoId) {
+            var infoElement = document.getElementById(infoId);
+            if (infoElement.style.display === "block") {
+                infoElement.style.display = "none";
+            } else {
+                infoElement.style.display = "block";
+            }
+        }
+    </script>
+
+</body>
+</html>

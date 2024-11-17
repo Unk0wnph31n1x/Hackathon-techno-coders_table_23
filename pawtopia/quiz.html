@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dog Chatbox</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f9f9f9;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+      .chatbox {
+        width: 400px;
+        max-width: 90%;
+        background-color: #fff;
+        border: 2px solid #ddd;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+      .chatbox-header {
+        background-color: #ff6f61;
+        color: #fff;
+        padding: 10px;
+        text-align: center;
+        font-size: 1.2em;
+      }
+      .chatbox-messages {
+        flex-grow: 1;
+        padding: 10px;
+        overflow-y: auto;
+        background-color: #f4f4f4;
+      }
+      .chatbox-messages p {
+        margin: 5px 0;
+        padding: 8px;
+        border-radius: 10px;
+      }
+      .user-message {
+        background-color: #d1e7ff;
+        text-align: right;
+      }
+      .bot-message {
+        background-color: #e1ffd4;
+      }
+      .chatbox-input {
+        display: flex;
+        border-top: 2px solid #ddd;
+      }
+      .chatbox-input input {
+        flex-grow: 1;
+        padding: 10px;
+        border: none;
+        border-radius: 0;
+        outline: none;
+      }
+      .chatbox-input button {
+        padding: 10px 20px;
+        border: none;
+        background-color: #ff6f61;
+        color: white;
+        cursor: pointer;
+      }
+      .chatbox-input button:hover {
+        background-color: #e55c51;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="chatbox">
+      <div class="chatbox-header">Dog Chatbot</div>
+      <div class="chatbox-messages" id="chatboxMessages">
+        <p class="bot-message">Hi! I’m here to answer your questions about dogs. Ask me anything!</p>
+      </div>
+      <div class="chatbox-input">
+        <input type="text" id="userInput" placeholder="Type your question here..." />
+        <button onclick="sendMessage()">Send</button>
+      </div>
+    </div>
+
+    <script>
+      const responses = {
+        "What are the best dog breeds for families?": "Labrador Retriever, Golden Retriever, and Beagle are great family-friendly breeds!",
+        "How do I train my puppy?": "Start with basic commands like 'sit' and 'stay'. Use positive reinforcement and be consistent.",
+        "What foods are toxic to dogs?": "Chocolate, grapes, onions, and xylitol are toxic to dogs.",
+        "How often should I bathe my dog?": "Typically once a month, but it depends on your dog's breed and activity level.",
+        "What game should I play with my dog?": "Mostly Fetch, Hide & Seek,Tug-of-War, Puzzle Toys, Agality Course, Scent Work or Water games",
+        "How much exercise does my dog need?": "High-Energy Breeds (1-2 hours or more daily), Moderate-Energy Breeds (30 minutes to 1 hour daily) and Low-Energy Breeds (15-30 minutes daily)",
+        "What is the lifespan of different dog breeds?": "Small Breeds (12-16+ years), Medium Breeds (10-14 years), Large Breeds (8-12 years)",
+        "How do I choose the right dog for my lifestyle?": "Assess Your Lifestyle - Activity Level, Living Space, Time Availability and Family Dynamics",
+        "What are the most low-maintenance dog breeds?": "Basenji, French Bulldog, Chihuahua,Dachshund, Pug, Shih Tzu, Greyhound, Basset Hound, Cavalier King Charles Spaniel and Maltese",
+        "What is the most popular dog breed?": "Labrador Retriever, French Bulldog, Golden Retriever, German Shepherd, Poodle (Standard, Miniature, and Toy), Bulldog, Beagle, Rottweiler, German Shorthaired Pointer and Dachshund",
+        "Which dog breeds are good with children?": "Labrador Retriever, Golden Retriever, Beagle, Cavalier King Charles Spaniel, Pug, Basset Hound, Boxer, Bernese Mountain Dog, Collie and Shetland Sheep dog",
+        "What are the best dog breeds for first-time owners?": "Labrador Retriever, Golden Retriever, Beagle, Cavalier King Charles Spaniel, Basset Hound, French Bulldog, Pug, Shih Tzu, Cocker Spaniel and  Yorkshire Terrier (Yorkie)",
+        "How can I train my dog?": "Start with basic commands like 'sit' and 'stay'. Use positive reinforcement and be consistent.",
+        "How do I train my dog?": "Start with basic commands like 'sit' and 'stay'. Use positive reinforcement and be consistent.",
+        "I want a dog?": "Ok,now can you specify it(eg How can I train my dog)",
+        "How do I adopt a dog?": "Find a Local Animal Shelter or Rescue",
+        "How often should I groom my dog?": "Short-Haired Dogs(Every 1-2 weeks), Long-Haired Dogs(2-3 times per week), Medium-haired Dogs(Once a week)",
+        "What type of food is best for my dog?": "Puppies (up to 1 year)-High-quality, nutrient-dense puppy food, Adults (1-7 years)- A balanced food with appropriate protein, fat, and fiber content for their activity level, Senior Dogs (7+ years)-Senior-specific formulas that focus on lower calories, joint support (glucosamine/chondroitin), and digestive health.",
+        "What are the signs that my dog is in pain or sick?": "Lethargy or Decreased Activity, Restlessness or Anxiety, Aggression or Irritability, Excessive Panting or Drooling",
+        "Why is my dog chewing everything?": "Puppies, like human babies, go through a teething phase, typically between 3 to 6 months old. This is when they lose their baby teeth and their adult teeth come in. Chewing helps alleviate the discomfort they feel in their gums.",
+        "How do I train my dog to walk on a leash?": "Choose a standard 4 to 6-foot leash (avoid retractable leashes for training, as they can be hard to control) and Use a well-fitted collar or a harness. If your dog tends to pull a lot, a front-clip harness can help prevent pulling and give you more control. Make sure it's comfortable and doesn’t choke your dog.",
+        "What are the common health problems in dogs?": "Allergies, Arthritis and Joint Problems, Dental Disease, Ear Infections, Obesity, Skin Conditions, Heart Disease, Cancer, Digestive Issues and Urinary Tract Infections (UTIs)"
+        };
+
+        function sendMessage() {
+        const userInput = document.getElementById("userInput").value.trim();
+        const chatboxMessages = document.getElementById("chatboxMessages");
+
+        if (userInput === "") return;
+
+        // Display user's message
+        const userMessage = document.createElement("p");
+        userMessage.className = "user-message";
+        userMessage.textContent = userInput;
+        chatboxMessages.appendChild(userMessage);
+
+        // Generate bot response
+        const botResponse = document.createElement("p");
+        botResponse.className = "bot-message";
+
+        if (responses[userInput]) {
+          botResponse.textContent = responses[userInput];
+        } else {
+          botResponse.textContent = "Sorry i can't help you with that information.But dont forget to add capital in the start and add a question !";
+        }
+
+        chatboxMessages.appendChild(botResponse);
+
+        // Scroll to the bottom of the chatbox
+        chatboxMessages.scrollTop = chatboxMessages.scrollHeight;
+
+        // Clear input field
+        document.getElementById("userInput").value = "";
+      }
+    </script>
+  </body>
+  </html>

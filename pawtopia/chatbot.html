@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Chatbot</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    #chat-output {
+      border: 1px solid #ccc;
+      padding: 10px;
+      height: 200px;
+      overflow-y: auto;
+      margin-bottom: 10px;
+    }
+    .bot-message {
+      color: blue;
+      margin-bottom: 5px;
+    }
+    .user-message {
+      color: green;
+      margin-bottom: 5px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Dog Adoption Chatbot</h1>
+  <div id="chat-output"></div>
+  <input type="text" id="chat-input" placeholder="Ask me about dogs!">
+  <button id="send-button">Send</button>
+
+  <script>
+    const chatOutput = document.getElementById('chat-output');
+    const chatInput = document.getElementById('chat-input');
+    const sendButton = document.getElementById('send-button');
+
+    // Memory to store user preferences
+    let memory = {};
+
+    // Responses based on context
+    const responses = {
+      "furry": "You might like a Husky or a Samoyed! Do you want a dog that's easy to groom?",
+      "small dog": "How about a Chihuahua or a Pomeranian? Are you looking for a companion for a small home?",
+      "big dog": "I recommend a Golden Retriever or a German Shepherd. Do you need an active or a calm companion?",
+      "easy grooming": "Consider a Beagle or a Labrador Retriever. Do you have time for daily walks?",
+      "high energy": "A Border Collie or a Dalmatian would be perfect! Are you an active person?",
+      "default": "I'm not sure about that. Can you ask something else about dogs?"
+    };
+
+    function addMessage(message, isBot) {
+      const div = document.createElement('div');
+      div.className = isBot ? 'bot-message' : 'user-message';
+      div.textContent = message;
+      chatOutput.appendChild(div);
+      chatOutput.scrollTop = chatOutput.scrollHeight; // Scroll to bottom
+    }
+
+    function getResponse(input) {
+      let response = "default";
+
+      // Check if the input matches any keywords
+      for (const key in responses) {
+        if (input.includes(key)) {
+          response = key;
+          memory.lastTopic = key; // Save context
+          break;
+        }
+      }
+
+      // Add follow-up based on memory
+      if (memory.lastTopic && input.includes("yes")) {
+        if (memory.lastTopic === "furry") {
+          return "In that case, a Samoyed is a great choice! They love attention.";
+        } else if (memory.lastTopic === "small dog") {
+          return "Then a Pomeranian would be perfect. They are small and full of personality!";
+        }
+      }
+
+      return responses[response];
+    }
+
+    sendButton.addEventListener('click', () => {
+      const userInput = chatInput.value.trim().toLowerCase();
+      if (!userInput) return;
+
+      // Add user message
+      addMessage(userInput, false);
+      chatInput.value = '';
+
+      // Generate bot response
+      const botResponse = getResponse(userInput);
+      addMessage(botResponse, true);
+    });
+  </script>
+</body>
+</html>
